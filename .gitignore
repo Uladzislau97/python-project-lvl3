@@ -1,0 +1,8 @@
+.python-version
+*.egg-info
+__pycache__
+dist/
+env/
+.vscode
+.coverage
+coverage.xml

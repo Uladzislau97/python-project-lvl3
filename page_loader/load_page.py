@@ -8,7 +8,7 @@ def generate_page_name(full_address):
     address_root, _ = os.path.splitext(full_address)
     scheme = urlparse(address_root).scheme
     address = address_root.replace(f"{scheme}://", '', 1)
-    address_parts = re.split('\W', address)
+    address_parts = re.split(r"\W", address)
     return '-'.join(address_parts)
 
 

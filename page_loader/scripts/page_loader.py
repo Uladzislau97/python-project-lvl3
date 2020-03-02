@@ -8,7 +8,9 @@ from page_loader import load_page
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Downloads the internet page and put it in the specified folder.'
+        description=(
+            'Downloads the internet page and put it in the specified folder.'
+        )
     )
     parser.add_argument('address')
     parser.add_argument(

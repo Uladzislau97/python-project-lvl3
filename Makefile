@@ -19,6 +19,8 @@ lint:
 test:
 	pytest
 
+check: lint test
+
 coverage:
 	pytest --cov=page_loader/ tests/
 

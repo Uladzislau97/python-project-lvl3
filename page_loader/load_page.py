@@ -3,6 +3,8 @@ import os
 import re
 from urllib.parse import urlparse
 
+from bs4 import BeautifulSoup
+
 
 def generate_page_name(full_address):
     address_root, _ = os.path.splitext(full_address)

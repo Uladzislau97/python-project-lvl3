@@ -49,7 +49,9 @@ def test_load_page_with_local_resources():
         with tempfile.TemporaryDirectory() as tmpdirname:
             load_page(address, tmpdirname)
 
-            result_html_path = os.path.join(tmpdirname, 'hexlet-io-courses.html')
+            result_html_path = os.path.join(
+                tmpdirname, 'hexlet-io-courses.html'
+            )
             with open(result_html_path, 'r') as f:
                 assert f.read() == result_html_content
 

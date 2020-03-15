@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "uladzislau97_page-loader"
-version = "0.2.2"
+version = "0.3.0"
 description = "Download the internet page and put it in the specified folder"
 authors = ["Uladzislau Vasilyeu <VSvasilyev97@gmail.com>"]
 readme = "README.md"
@@ -32,7 +32,7 @@ beautifulsoup4 = "^4.8"
 flake8 = "^3.7"
 pytest = "^5.3"
 pytest-cov = "^2.8"
-    
+
 [tool.poetry.scripts]
 page-loader = "page_loader.scripts.page_loader:main"
 

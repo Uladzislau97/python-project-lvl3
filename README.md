@@ -17,5 +17,5 @@ Run `pip install --index-url https://test.pypi.org/simple/ --extra-index-url htt
 ##### SAVE FILE BY SPECIFIED PATH (THE DIRECTORY OF LAUNCH BY DEFAULT)
 [![asciicast](https://asciinema.org/a/O9EQlaJcZzNZ5dRQrOcWJJEZh.svg)](https://asciinema.org/a/O9EQlaJcZzNZ5dRQrOcWJJEZh)
 #
-#### LOAD ALL LOCAL RESOURCES
+##### LOAD ALL LOCAL RESOURCES
 [![asciicast](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL.svg)](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL)

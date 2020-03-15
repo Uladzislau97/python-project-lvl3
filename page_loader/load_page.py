@@ -16,6 +16,7 @@ def generate_file_name(full_address, is_asset=False):
     address_root_parts = urlparse(address_root)
     scheme = address_root_parts.scheme
     if is_asset:
+        ext = ext or HTML_EXT
         netloc = address_root_parts.netloc
         address = address_root.replace(f"{scheme}://{netloc}/", '', 1)
     else:

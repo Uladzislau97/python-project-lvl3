@@ -52,9 +52,10 @@ def is_binary_resource(resource):
     return resource.name == IMG
 
 
-def load_page(address, output):
-    logging.info('Donwload address: {address}')
-    logging.info('Output path: {output}')
+def load_page(address, output, logging_level):
+    logging.basicConfig(level=logging_level)
+    logging.debug(f"Donwload address: {address}")
+    logging.debug(f"Output path: {output}")
 
     r = requests.get(address)
     if r.status_code != 200:
@@ -70,8 +71,8 @@ def load_page(address, output):
     assets_folder_name = f"{filename}_files"
     assets_folder_path = os.path.join(output, assets_folder_name)
     if len(local_resources) and not os.path.exists(assets_folder_path):
-        logging.info(
-            'Create folder for local files: {assets_folder_path}'
+        logging.debug(
+            f"Create folder for local files: {assets_folder_path}"
         )
         os.mkdir(assets_folder_path)
 
@@ -80,7 +81,7 @@ def load_page(address, output):
         resource_url = resource[attr_name]
         full_resource_url = urljoin(address, resource_url)
 
-        logging.info('Download resource: {full_resource_url}')
+        logging.debug(f"Download resource: {full_resource_url}")
         response = requests.get(full_resource_url)
 
         if is_binary_resource(resource):
@@ -93,7 +94,7 @@ def load_page(address, output):
         resource_name = generate_file_name(full_resource_url, is_asset=True)
         resource_path = os.path.join(assets_folder_path, resource_name)
         with open(resource_path, write_mode) as f:
-            logging.info('Save resource as: {resource_path}')
+            logging.debug(f"Save resource as: {resource_path}")
             f.write(resource_content)
 
         resource_full_name = os.path.join(assets_folder_name, resource_name)
@@ -101,5 +102,5 @@ def load_page(address, output):
 
     output_path = os.path.join(output, filename + HTML_EXT)
     with open(output_path, 'w') as f:
-        logging.info('Save main page as: {output_path}')
+        logging.debug(f"Save main page as: {output_path}")
         f.write(soup.prettify())

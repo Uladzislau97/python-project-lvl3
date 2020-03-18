@@ -1,5 +1,6 @@
 import tempfile
 import os
+import logging
 
 import requests_mock
 
@@ -13,7 +14,7 @@ def test_load_page():
         m.get(address, text=response_text)
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            load_page(address, tmpdirname)
+            load_page(address, tmpdirname, logging.DEBUG)
             result_path = os.path.join(tmpdirname, 'hexlet-io-courses.html')
 
             with open(result_path, 'r') as f:
@@ -47,7 +48,7 @@ def test_load_page_with_local_resources():
             result_html_content = f.read()
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            load_page(address, tmpdirname)
+            load_page(address, tmpdirname, logging.DEBUG)
 
             result_html_path = os.path.join(
                 tmpdirname, 'hexlet-io-courses.html'

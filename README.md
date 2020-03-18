@@ -19,3 +19,6 @@ Run `pip install --index-url https://test.pypi.org/simple/ --extra-index-url htt
 #
 ##### LOAD ALL LOCAL RESOURCES
 [![asciicast](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL.svg)](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL)
+#
+##### RUN CLI WITH LOGS
+[![asciicast](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3.svg)](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3)

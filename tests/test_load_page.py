@@ -3,6 +3,7 @@ import os
 import logging
 
 import requests_mock
+import pytest
 
 from page_loader import load_page
 
@@ -19,6 +20,19 @@ def test_load_page():
 
             with open(result_path, 'r') as f:
                 assert f.read() == response_text
+
+
+def test_error_in_loading_page():
+    with requests_mock.mock() as m:
+        address = 'https://hexlet.io/courses'
+        m.get(address, text='Not Found', status_code=404)
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with pytest.raises(SystemExit) as excinfo:
+                load_page(address, tmpdirname, logging.DEBUG)
+            assert str(excinfo.value) == (
+                f"Request to {address} returned: 404 Not Found"
+            )
 
 
 def test_load_page_with_local_resources():

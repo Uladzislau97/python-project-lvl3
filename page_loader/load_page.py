@@ -2,6 +2,7 @@ import requests
 import os
 import re
 import logging
+import sys
 from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
@@ -59,8 +60,9 @@ def load_page(address, output, logging_level):
 
     r = requests.get(address)
     if r.status_code != 200:
-        print('Error')
-        return
+        sys.exit(
+            f"Request to {address} returned: {r.status_code} {r.text}"
+        )
 
     page_content = r.text
     soup = BeautifulSoup(page_content, features="html.parser")

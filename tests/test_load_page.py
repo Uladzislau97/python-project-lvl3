@@ -25,7 +25,7 @@ def test_load_page():
 def test_error_in_loading_page():
     with requests_mock.mock() as m:
         address = 'https://hexlet.io/courses'
-        m.get(address, text='Not Found', status_code=404)
+        m.get(address, reason='Not Found', status_code=404)
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             with pytest.raises(SystemExit) as excinfo:
@@ -87,3 +87,27 @@ def test_load_page_with_local_resources():
             )
             with open(result_bin_path, 'rb') as f:
                 assert f.read() == result_bin_content
+
+
+def test_error_in_loading_local_resource():
+    with requests_mock.mock() as m:
+        host = 'https://hexlet.io'
+        address = host + '/courses'
+
+        with open('tests/fixtures/index.html', 'r') as f:
+            m.get(address, text=f.read())
+
+        with open('tests/fixtures/index.css', 'r') as f:
+            request_address = host + '/assets/index.css'
+            m.get(
+                request_address,
+                reason='Internal Server Error',
+                status_code=500
+            )
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with pytest.raises(SystemExit) as excinfo:
+                load_page(address, tmpdirname, logging.DEBUG)
+            assert str(excinfo.value) == (
+                f"Request to {address} returned: 500 Internal Server Error"
+            )

@@ -61,7 +61,7 @@ def load_page(address, output, logging_level):
     r = requests.get(address)
     if r.status_code != 200:
         sys.exit(
-            f"Request to {address} returned: {r.status_code} {r.text}"
+            f"Request to {address} returned: {r.status_code} {r.reason}"
         )
 
     page_content = r.text
@@ -84,7 +84,13 @@ def load_page(address, output, logging_level):
         full_resource_url = urljoin(address, resource_url)
 
         logging.debug(f"Download resource: {full_resource_url}")
+
         response = requests.get(full_resource_url)
+        if response.status_code != 200:
+            sys.exit(
+                f"Request to {address} returned: "
+                f"{response.status_code} {response.reason}"
+            )
 
         if is_binary_resource(resource):
             resource_content = response.content

@@ -2,8 +2,6 @@ import requests
 import os
 import re
 import logging
-import sys
-import errno
 from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
@@ -58,9 +56,9 @@ def is_binary_resource(resource):
 def download_file(address, binary=False):
     r = requests.get(address)
     if r.status_code != 200:
-        sys.exit(
-            f"Request to {address} returned: {r.status_code} {r.reason}"
-        )
+        msg = f"Request to {address} returned: {r.status_code} {r.reason}"
+        logging.error(msg)
+        raise ConnectionError(msg)
     return r.content if binary else r.text
 
 
@@ -70,26 +68,26 @@ def save_to_file(write_path, content, binary=False):
         with open(write_path, mode) as f:
             f.write(content)
     except FileNotFoundError:
-        logging.error(f"Invalid path to save file: {write_path}")
-        sys.exit(errno.ENOENT)
+        msg = f"Invalid path to save file: {write_path}"
+        logging.error(msg)
+        raise FileNotFoundError(msg)
     except PermissionError:
-        logging.error(f"No permission to save file: {write_path}")
-        sys.exit(errno.EACCES)
+        msg = f"No permission to save file: {write_path}"
+        logging.error(msg)
+        raise PermissionError(msg)
 
 
 def create_folder(folder_path):
     try:
         os.mkdir(folder_path)
     except FileNotFoundError:
-        logging.error(
-            f"Invalid path for local resources folder: {folder_path}"
-        )
-        sys.exit(errno.ENOENT)
+        msg = f"Invalid path for local resources folder: {folder_path}"
+        logging.error(msg)
+        raise FileNotFoundError(msg)
     except PermissionError:
-        logging.error(
-            f"No permission to create folder: {folder_path}"
-        )
-        sys.exit(errno.EACCES)
+        msg = f"No permission to create folder: {folder_path}"
+        logging.error(msg)
+        raise PermissionError(msg)
 
 
 def load_page(address, output, logging_level):

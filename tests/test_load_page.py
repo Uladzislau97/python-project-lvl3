@@ -1,7 +1,6 @@
 import tempfile
 import os
 import logging
-import errno
 import stat
 
 import requests_mock
@@ -30,7 +29,7 @@ def test_error_in_loading_page():
         m.get(address, reason='Not Found', status_code=404)
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with pytest.raises(SystemExit) as excinfo:
+            with pytest.raises(ConnectionError) as excinfo:
                 load_page(address, tmpdirname, logging.DEBUG)
             assert str(excinfo.value) == (
                 f"Request to {address} returned: 404 Not Found"
@@ -44,9 +43,12 @@ def test_invalid_save_path():
 
         with tempfile.TemporaryDirectory() as tmpdirname:
             wrong_tmpdirname = tmpdirname + 'xxxxxxxx'
-            with pytest.raises(SystemExit) as excinfo:
+            result_path = f"{wrong_tmpdirname}/hexlet-io-courses.html"
+            with pytest.raises(FileNotFoundError) as excinfo:
                 load_page(address, wrong_tmpdirname, logging.DEBUG)
-            assert excinfo.value.code == errno.ENOENT
+            assert str(excinfo.value) == (
+                f"Invalid path to save file: {result_path}"
+            )
 
 
 def test_no_permission_to_save_file():
@@ -55,10 +57,13 @@ def test_no_permission_to_save_file():
         m.get(address, text='')
 
         with tempfile.TemporaryDirectory() as tmpdirname:
+            result_path = f"{tmpdirname}/hexlet-io-courses.html"
             os.chmod(tmpdirname, stat.S_IREAD)
-            with pytest.raises(SystemExit) as excinfo:
+            with pytest.raises(PermissionError) as excinfo:
                 load_page(address, tmpdirname, logging.DEBUG)
-            assert excinfo.value.code == errno.EACCES
+            assert str(excinfo.value) == (
+                f"No permission to save file: {result_path}"
+            )
 
 
 def test_load_page_with_local_resources():
@@ -132,7 +137,7 @@ def test_error_in_loading_local_resource():
             )
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with pytest.raises(SystemExit) as excinfo:
+            with pytest.raises(ConnectionError) as excinfo:
                 load_page(address, tmpdirname, logging.DEBUG)
             assert str(excinfo.value) == (
                 f"Request to {request_address} returned: "

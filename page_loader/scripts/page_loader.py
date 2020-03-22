@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import os
 import logging
+import sys
+import errno
 
 import argparse
 
@@ -56,7 +58,13 @@ def main():
         default=WARNING
     )
     args = parser.parse_args()
-    load_page(args.address, args.output, args.logging)
+
+    try:
+        load_page(args.address, args.output, args.logging)
+    except FileNotFoundError:
+        sys.exit(errno.ENOENT)
+    except PermissionError:
+        sys.exit(errno.EACCES)
 
 
 if __name__ == "__main__":

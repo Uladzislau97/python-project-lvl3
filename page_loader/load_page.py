@@ -65,7 +65,6 @@ def download_file(address, binary=False):
 def save_to_file(write_path, content, binary=False):
     mode = 'wb' if binary else 'w'
     with open(write_path, mode) as f:
-        logging.debug(f"Save file as: {write_path}")
         f.write(content)
 
 
@@ -99,6 +98,8 @@ def load_page(address, output, logging_level):
         resource_content = download_file(full_resource_url, is_binary)
         resource_name = generate_file_name(full_resource_url, is_asset=True)
         resource_path = os.path.join(assets_folder_path, resource_name)
+
+        logging.debug(f"Save local resource as: {resource_path}")
         save_to_file(resource_path, resource_content, is_binary)
 
         resource_full_name = os.path.join(assets_folder_name, resource_name)
@@ -106,4 +107,6 @@ def load_page(address, output, logging_level):
 
     output_path = os.path.join(output, filename + HTML_EXT)
     result_page_content = soup.prettify()
+
+    logging.debug(f"Save main page as: {output_path}")
     save_to_file(output_path, result_page_content)

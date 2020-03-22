@@ -109,5 +109,6 @@ def test_error_in_loading_local_resource():
             with pytest.raises(SystemExit) as excinfo:
                 load_page(address, tmpdirname, logging.DEBUG)
             assert str(excinfo.value) == (
-                f"Request to {address} returned: 500 Internal Server Error"
+                f"Request to {request_address} returned: "
+                "500 Internal Server Error"
             )

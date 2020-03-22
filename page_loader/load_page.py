@@ -3,6 +3,7 @@ import os
 import re
 import logging
 import sys
+import errno
 from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
@@ -64,8 +65,30 @@ def download_file(address, binary=False):
 
 def save_to_file(write_path, content, binary=False):
     mode = 'wb' if binary else 'w'
-    with open(write_path, mode) as f:
-        f.write(content)
+    try:
+        with open(write_path, mode) as f:
+            f.write(content)
+    except FileNotFoundError:
+        logging.error(f"Invalid path to save file: {write_path}")
+        sys.exit(errno.ENOENT)
+    except PermissionError:
+        logging.error(f"No permission to save file: {write_path}")
+        sys.exit(errno.EACCES)
+
+
+def create_folder(folder_path):
+    try:
+        os.mkdir(folder_path)
+    except FileNotFoundError:
+        logging.error(
+            f"Invalid path for local resources folder: {folder_path}"
+        )
+        sys.exit(errno.ENOENT)
+    except PermissionError:
+        logging.error(
+            f"No permission to create folder: {folder_path}"
+        )
+        sys.exit(errno.EACCES)
 
 
 def load_page(address, output, logging_level):
@@ -85,7 +108,7 @@ def load_page(address, output, logging_level):
         logging.debug(
             f"Create folder for local files: {assets_folder_path}"
         )
-        os.mkdir(assets_folder_path)
+        create_folder(assets_folder_path)
 
     for resource in local_resources:
         attr_name = get_resource_attr_name(resource)
@@ -93,9 +116,9 @@ def load_page(address, output, logging_level):
         full_resource_url = urljoin(address, resource_url)
 
         logging.debug(f"Download resource: {full_resource_url}")
-
         is_binary = is_binary_resource(resource)
         resource_content = download_file(full_resource_url, is_binary)
+
         resource_name = generate_file_name(full_resource_url, is_asset=True)
         resource_path = os.path.join(assets_folder_path, resource_name)
 

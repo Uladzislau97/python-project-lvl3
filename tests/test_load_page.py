@@ -1,6 +1,8 @@
 import tempfile
 import os
 import logging
+import errno
+import stat
 
 import requests_mock
 import pytest
@@ -33,6 +35,30 @@ def test_error_in_loading_page():
             assert str(excinfo.value) == (
                 f"Request to {address} returned: 404 Not Found"
             )
+
+
+def test_invalid_save_path():
+    with requests_mock.mock() as m:
+        address = 'https://hexlet.io/courses'
+        m.get(address, text='')
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            wrong_tmpdirname = tmpdirname + 'xxxxxxxx'
+            with pytest.raises(SystemExit) as excinfo:
+                load_page(address, wrong_tmpdirname, logging.DEBUG)
+            assert excinfo.value.code == errno.ENOENT
+
+
+def test_no_permission_to_save_file():
+    with requests_mock.mock() as m:
+        address = 'https://hexlet.io/courses'
+        m.get(address, text='')
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            os.chmod(tmpdirname, stat.S_IREAD)
+            with pytest.raises(SystemExit) as excinfo:
+                load_page(address, tmpdirname, logging.DEBUG)
+            assert excinfo.value.code == errno.EACCES
 
 
 def test_load_page_with_local_resources():

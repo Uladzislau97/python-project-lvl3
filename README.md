@@ -10,15 +10,12 @@
 #
 ##### INSTALLATION
 
-Run `pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple uladzislau97-gendiff` to install.
+Run `pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple uladzislau97_page-loader` to install.
 
 [![asciicast](https://asciinema.org/a/MhsBgUzXHaMOCIqlJZRcqIiKh.svg)](https://asciinema.org/a/MhsBgUzXHaMOCIqlJZRcqIiKh)
 #
-##### SAVE FILE BY SPECIFIED PATH (THE DIRECTORY OF LAUNCH BY DEFAULT)
-[![asciicast](https://asciinema.org/a/O9EQlaJcZzNZ5dRQrOcWJJEZh.svg)](https://asciinema.org/a/O9EQlaJcZzNZ5dRQrOcWJJEZh)
-#
-##### LOAD ALL LOCAL RESOURCES
-[![asciicast](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL.svg)](https://asciinema.org/a/fu4cNznYzFnVQOcsTrSvzIdXL)
+##### SAVE PAGE AND ALL LOCAL RESOURCES
+[![asciicast](https://asciinema.org/a/5f2x6pq6fexvLbPbc9M9VK6fi.svg)](https://asciinema.org/a/5f2x6pq6fexvLbPbc9M9VK6fi)
 #
 ##### RUN CLI WITH LOGS
 [![asciicast](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3.svg)](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3)

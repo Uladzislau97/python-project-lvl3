@@ -53,18 +53,28 @@ def is_binary_resource(resource):
     return resource.name == IMG
 
 
-def load_page(address, output, logging_level):
-    logging.basicConfig(level=logging_level)
-    logging.debug(f"Donwload address: {address}")
-    logging.debug(f"Output path: {output}")
-
+def download_file(address, binary=False):
     r = requests.get(address)
     if r.status_code != 200:
         sys.exit(
             f"Request to {address} returned: {r.status_code} {r.reason}"
         )
+    return r.content if binary else r.text
 
-    page_content = r.text
+
+def save_to_file(write_path, content, binary=False):
+    mode = 'wb' if binary else 'w'
+    with open(write_path, mode) as f:
+        logging.debug(f"Save file as: {write_path}")
+        f.write(content)
+
+
+def load_page(address, output, logging_level):
+    logging.basicConfig(level=logging_level)
+    logging.debug(f"Donwload address: {address}")
+    logging.debug(f"Output path: {output}")
+
+    page_content = download_file(address)
     soup = BeautifulSoup(page_content, features="html.parser")
     page_resources = soup.find_all(RESOURCE_TAGS)
     local_resources = select_local_resources(page_resources)
@@ -85,30 +95,15 @@ def load_page(address, output, logging_level):
 
         logging.debug(f"Download resource: {full_resource_url}")
 
-        response = requests.get(full_resource_url)
-        if response.status_code != 200:
-            sys.exit(
-                f"Request to {address} returned: "
-                f"{response.status_code} {response.reason}"
-            )
-
-        if is_binary_resource(resource):
-            resource_content = response.content
-            write_mode = 'wb'
-        else:
-            resource_content = response.text
-            write_mode = 'w'
-
+        is_binary = is_binary_resource(resource)
+        resource_content = download_file(full_resource_url, is_binary)
         resource_name = generate_file_name(full_resource_url, is_asset=True)
         resource_path = os.path.join(assets_folder_path, resource_name)
-        with open(resource_path, write_mode) as f:
-            logging.debug(f"Save resource as: {resource_path}")
-            f.write(resource_content)
+        save_to_file(resource_path, resource_content, is_binary)
 
         resource_full_name = os.path.join(assets_folder_name, resource_name)
         resource[attr_name] = resource_full_name
 
     output_path = os.path.join(output, filename + HTML_EXT)
-    with open(output_path, 'w') as f:
-        logging.debug(f"Save main page as: {output_path}")
-        f.write(soup.prettify())
+    result_page_content = soup.prettify()
+    save_to_file(output_path, result_page_content)

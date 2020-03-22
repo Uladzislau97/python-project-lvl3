@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "uladzislau97_page-loader"
-version = "0.5.0"
+version = "0.5.1"
 description = "Download the internet page and put it in the specified folder"
 authors = ["Uladzislau Vasilyeu <VSvasilyev97@gmail.com>"]
 readme = "README.md"

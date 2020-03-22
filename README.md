@@ -22,3 +22,6 @@ Run `pip install --index-url https://test.pypi.org/simple/ --extra-index-url htt
 #
 ##### RUN CLI WITH LOGS
 [![asciicast](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3.svg)](https://asciinema.org/a/xrsqMTb2qjK8nfNZUBvLzFgx3)
+#
+##### EXAMPLE OF ERROR LOGS
+[![asciicast](https://asciinema.org/a/rjuwPmkeNtSZt742957COAaPv.svg)](https://asciinema.org/a/rjuwPmkeNtSZt742957COAaPv)

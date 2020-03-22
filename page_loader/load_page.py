@@ -7,6 +7,7 @@ import errno
 from urllib.parse import urlparse, urljoin
 
 from bs4 import BeautifulSoup
+from progress.bar import Bar
 
 
 HTML_EXT = '.html'
@@ -96,10 +97,15 @@ def load_page(address, output, logging_level):
     logging.debug(f"Donwload address: {address}")
     logging.debug(f"Output path: {output}")
 
+    bar = Bar('Processing', max=5)
+
     page_content = download_file(address)
+    bar.next()
+
     soup = BeautifulSoup(page_content, features="html.parser")
     page_resources = soup.find_all(RESOURCE_TAGS)
     local_resources = select_local_resources(page_resources)
+    bar.next()
 
     filename = generate_file_name(address)
     assets_folder_name = f"{filename}_files"
@@ -109,6 +115,7 @@ def load_page(address, output, logging_level):
             f"Create folder for local files: {assets_folder_path}"
         )
         create_folder(assets_folder_path)
+    bar.next()
 
     for resource in local_resources:
         attr_name = get_resource_attr_name(resource)
@@ -127,9 +134,12 @@ def load_page(address, output, logging_level):
 
         resource_full_name = os.path.join(assets_folder_name, resource_name)
         resource[attr_name] = resource_full_name
+    bar.next()
 
     output_path = os.path.join(output, filename + HTML_EXT)
     result_page_content = soup.prettify()
 
     logging.debug(f"Save main page as: {output_path}")
     save_to_file(output_path, result_page_content)
+    bar.next()
+    bar.finish()
